@@ -1,0 +1,21 @@
+site_name: MIT 6A01 Fall 2019
+theme: 
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - shell
+        - python
+
+site_author: Mark Mazumder
+copyright: "Author: Mark Mazumder, 2019"
+markdown_extensions:
+- admonition
+- attr_list
+- pymdownx.arithmatex
+- toc
+#    baselevel: 4
+
+# https://github.com/mkdocs/mkdocs/issues/1678
+# https://squidfunk.github.io/mkdocs-material/extensions/pymdown/#arithmatex-mathjax
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
