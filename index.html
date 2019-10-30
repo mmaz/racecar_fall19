@@ -61,14 +61,11 @@
         
             <li><a class="toctree-l3" href="#introduction">Introduction</a></li>
         
+            <li><a class="toctree-l3" href="#references">References</a></li>
+        
             <li><a class="toctree-l3" href="#part-1-install-required-python-libraries">Part 1: Install required Python libraries</a></li>
         
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#part-2-racecar-data-collection-and-training">Part 2: RACECAR data collection and training</a></li>
-    
-        <ul>
+            <li><a class="toctree-l3" href="#part-2-racecar-data-collection-and-training">Part 2: RACECAR data collection and training</a></li>
         
             <li><a class="toctree-l3" href="#part-3-defining-the-pilotnet-model">Part 3: Defining the PilotNet model</a></li>
         
@@ -135,11 +132,23 @@
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/SN7MkDwkLys" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+<h2 id="references">References</h2>
 <p>This lab and the CNN architecture we will use are based on the following resources:</p>
 <ul>
 <li><a href="https://devblogs.nvidia.com/deep-learning-self-driving-cars/">Nvidia's blog post introducing the concept and their results</a></li>
 <li><a href="https://arxiv.org/pdf/1704.07911.pdf">Nvidia's PilotNet paper</a></li>
 <li><a href="https://github.com/udacity/self-driving-car-sim">Udacity's Unity3D-based Self-Driving-Car Simulator</a> and <a href="https://github.com/naokishibuya/car-behavioral-cloning">Naoki Shibuya's example</a> </li>
+</ul>
+<p>Several recent papers on <strong>Imitation Learning/Behavioral Cloning</strong> have pushed the state of the art and even demonstrated the ability to drive a full-size car in the real world in more complex scenarios. And like PilotNet, many recent robotics papers build upon the general concept of a "pixel-to-actuator" network. Below are a couple of interesting examples. These papers may provide you with ideas for extending your lab assignment to be capable of more than just estimating steering angles. See the <a href=".#tips-and-suggestions">Tips and Suggestions</a> section for more ideas.</p>
+<ul>
+<li><a href="https://sites.google.com/view/waymo-learn-to-drive/">ChauffeurNet: Learning to Drive by Imitating the Best and Synthesizing the Worst</a></li>
+<li><a href="https://sites.google.com/view/zhang-tai-19ral-vrg/home">VR-Goggles for Robots: Real-to-sim Domain Adaptation for Visual Control</a></li>
+<li><a href="http://rpg.ifi.uzh.ch/dronet.html">DroNet: Learning to Fly by Driving</a></li>
+<li><a href="https://arxiv.org/abs/1704.05588">Learning to Fly by Crashing</a></li>
+<li><a href="https://arxiv.org/abs/1905.11979">Causal Confusion in Imitation Learning</a></li>
+<li><a href="https://xbpeng.github.io/projects/VDB/index.html">Variational Discriminator Bottleneck: Improving Imitation Learning, Inverse RL, and GANs by Constraining Information Flow</a></li>
+<li><a href="https://arxiv.org/abs/1710.02410">End-to-end Driving via Conditional Imitation Learning</a></li>
+<li><a href="https://arxiv.org/pdf/1905.06937.pdf">Monocular Plan View Networks for Autonomous Driving</a></li>
 </ul>
 <h2 id="part-1-install-required-python-libraries">Part 1: Install required Python libraries</h2>
 <h3 id="tensorflow-a-deep-learning-framework"><code>TensorFlow,</code> a deep-learning framework</h3>
@@ -166,7 +175,7 @@ $ conda env create -f environment.yml
 $ conda env create -f environment-gpu.yml
 </code></pre>
 
-<h1 id="part-2-racecar-data-collection-and-training">Part 2: RACECAR data collection and training</h1>
+<h2 id="part-2-racecar-data-collection-and-training">Part 2: RACECAR data collection and training</h2>
 <p>In this section you will manually collect steering angle data by driving the car around. </p>
 <p>A good first task is to train the RACECAR to drive around some tables in a circle, before tackling a more complex course layout such as Stata basement. You can also define some more intermediate-difficulty courses (figure-eights, snake patterns, etc) to gain intuition on what types of training and validation methods are most effective.</p>
 <p>Here is an example of training data collected around some tables in a classroom:</p>
@@ -381,7 +390,7 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 <iframe width="560" height="315" src="https://www.youtube.com/embed/o0I6_YiL0X4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <h2 id="tips-and-suggestions">Tips and Suggestions</h2>
-<p>If you are having diffuclty training a working model, here are some suggestions:</p>
+<p>If you are having diffuclty training a working model, or are looking for ideas for improvement, here are some suggestions:</p>
 <ol>
 <li>Visualize your model's predictions by saving the center camera images when you are testing a model (you can use the <a href="https://github.com/mmaz/imitation_learning_lab/blob/2ebcd9140e34ca2e2283496a84ea4e47c8979788/infer_RACECAR.py#L21"><code>SAVE_RUN</code></a> flag) and incorporate some of the code snippets from <a href="https://github.com/mmaz/imitation_learning_lab/blob/master/visualize_drive.ipynb">visualize_drive.ipynb</a>. <ul>
 <li>Are the model outputs noisy (i.e., are the predicted angles jumping around a lot)? Try using the mean or median filter in <code>infer_RACECAR.py</code>. </li>
@@ -402,10 +411,13 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 <li>Moreover, if you are using the <a href="https://github.com/mmaz/imitation_learning_lab/blob/2ebcd9140e34ca2e2283496a84ea4e47c8979788/infer_RACECAR.py#L21"><code>SAVE_RUN</code></a> flag, you can try visualizing predictions from all your model variants on the same saved run - you might find another trained model or saved epoch is doing better than the one you were using for testing.</li>
 </ul>
 </li>
-<li>You can try adding more model regularization (e.g., more dropout or batchnorm layers) to avoid overfitting. You might also try to decrease the learning rate (you will need to train for longer) - if the learning rate is too high, the model will coverge too quickly. You might also choose to experiment with different activation types (ReLU, ELU, Tanh, ...) since they have different characteristics with respect to backprop.</li>
+<li>You can try adding different strategies for model regularization (e.g., weight decay, more dropout, or batchnorm layers) to avoid overfitting. You might also try to decrease the learning rate (you will need to train for longer) - if the learning rate is too high, the model will coverge too quickly. You might also choose to experiment with different activation types (ReLU, ELU, Tanh, Sigmoid, ...) since they have different characteristics with respect to backprop.<ul>
+<li>See <a href="http://neuralnetworksanddeeplearning.com/chap3.html">this chaper of Neural Networks and Deep Learning</a> for a useful introduction to regularization.</li>
+</ul>
+</li>
 <li>With x-forwarding to view the live camera stream, or when copying training data from the RACECAR to your laptop or a server, connecting to the car's router via Ethernet will probably be faster than connecting over WiFi. If you do need to stream or copy data over WiFi, try to use the 5GHz network which will probably be faster.</li>
-<li>Read <a href="https://arxiv.org/pdf/1704.07911.pdf">Nvidia's PilotNet paper</a> and papers which have cited it (e.g., via Google Scholar) for many more ideas (often in methodology sections, and future work discussions).</li>
 <li>One powerful regularization/generalization technique for training neural networks is <a href="https://en.wikipedia.org/wiki/Multi-task_learning">multi-task learning</a>. A crude version of this approach might be to add a second output to the network which predicts velocities (which is also being saved in your CSV). It is optional whether you choose to command the model's predicted velocities or continue to command a fixed speed (the current behavior of <code>drive_RACECAR.py</code>) when running inference - the benefits to model regularization may still be gained from this change. However, this will likely require more training data.</li>
+<li>See the cited papers in the <a href=".#references">References</a> section to find many more ideas for improvement. One place to start is by reading <a href="https://arxiv.org/pdf/1704.07911.pdf">Nvidia's PilotNet paper</a> and papers which have cited it (e.g., using Google Scholar) for some ideas (often in methodology sections, and future work discussions). </li>
 </ol>
               
             </div>
@@ -449,5 +461,5 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-10-29 19:51:06
+Build Date UTC : 2019-10-30 21:07:55
 -->
