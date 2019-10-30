@@ -20,11 +20,24 @@ We will train the model using camera data and steering angles collected from the
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/SN7MkDwkLys" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+## References
+
 This lab and the CNN architecture we will use are based on the following resources:
 
 * [Nvidia's blog post introducing the concept and their results](https://devblogs.nvidia.com/deep-learning-self-driving-cars/)
 * [Nvidia's PilotNet paper](https://arxiv.org/pdf/1704.07911.pdf)
 * [Udacity's Unity3D-based Self-Driving-Car Simulator](https://github.com/udacity/self-driving-car-sim) and [Naoki Shibuya's example](https://github.com/naokishibuya/car-behavioral-cloning) 
+
+Several recent papers on **Imitation Learning/Behavioral Cloning** have pushed the state of the art and even demonstrated the ability to drive a full-size car in the real world in more complex scenarios. And like PilotNet, many recent robotics papers build upon the general concept of a "pixel-to-actuator" network. Below are a couple of interesting examples. These papers may provide you with ideas for extending your lab assignment to be capable of more than just estimating steering angles. See the [Tips and Suggestions](index.md#tips-and-suggestions) section for more ideas.
+
+* [ChauffeurNet: Learning to Drive by Imitating the Best and Synthesizing the Worst](https://sites.google.com/view/waymo-learn-to-drive/)
+* [VR-Goggles for Robots: Real-to-sim Domain Adaptation for Visual Control](https://sites.google.com/view/zhang-tai-19ral-vrg/home)
+* [DroNet: Learning to Fly by Driving](http://rpg.ifi.uzh.ch/dronet.html)
+* [Learning to Fly by Crashing](https://arxiv.org/abs/1704.05588)
+* [Causal Confusion in Imitation Learning](https://arxiv.org/abs/1905.11979)
+* [Variational Discriminator Bottleneck: Improving Imitation Learning, Inverse RL, and GANs by Constraining Information Flow](https://xbpeng.github.io/projects/VDB/index.html)
+* [End-to-end Driving via Conditional Imitation Learning](https://arxiv.org/abs/1710.02410)
+* [Monocular Plan View Networks for Autonomous Driving](https://arxiv.org/pdf/1905.06937.pdf)
 
 
 ## Part 1: Install required Python libraries
@@ -59,7 +72,7 @@ $ conda env create -f environment.yml
 $ conda env create -f environment-gpu.yml
 ```
 
-# Part 2: RACECAR data collection and training
+## Part 2: RACECAR data collection and training
 
 In this section you will manually collect steering angle data by driving the car around. 
 
@@ -333,9 +346,10 @@ $ python2 zed_RACECAR.py
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/o0I6_YiL0X4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+
 ## Tips and Suggestions
 
-If you are having diffuclty training a working model, here are some suggestions:
+If you are having diffuclty training a working model, or are looking for ideas for improvement, here are some suggestions:
 
 1. Visualize your model's predictions by saving the center camera images when you are testing a model (you can use the [`SAVE_RUN`](https://github.com/mmaz/imitation_learning_lab/blob/2ebcd9140e34ca2e2283496a84ea4e47c8979788/infer_RACECAR.py#L21) flag) and incorporate some of the code snippets from [visualize_drive.ipynb](https://github.com/mmaz/imitation_learning_lab/blob/master/visualize_drive.ipynb). 
     * Are the model outputs noisy (i.e., are the predicted angles jumping around a lot)? Try using the mean or median filter in `infer_RACECAR.py`. 
@@ -350,7 +364,8 @@ If you are having diffuclty training a working model, here are some suggestions:
 1. Be wary of overfitting: try multiple saved checkpoints instead of just the last one (a checkpoint is saved every epoch). You can shorten the number of training steps per epoch and increase the number of epochs to have more models to try out. You can try a larger batch size on the server too. 
 1. Try to plan multiple training experiments ahead of time. Instead of changing one hyperparameter, training a model and testing, and going back to change another hyperparameter, try to train several models with different hyperparameters in one session and copy them all over to your racecar.
     * Moreover, if you are using the [`SAVE_RUN`](https://github.com/mmaz/imitation_learning_lab/blob/2ebcd9140e34ca2e2283496a84ea4e47c8979788/infer_RACECAR.py#L21) flag, you can try visualizing predictions from all your model variants on the same saved run - you might find another trained model or saved epoch is doing better than the one you were using for testing.
-1. You can try adding more model regularization (e.g., more dropout or batchnorm layers) to avoid overfitting. You might also try to decrease the learning rate (you will need to train for longer) - if the learning rate is too high, the model will coverge too quickly. You might also choose to experiment with different activation types (ReLU, ELU, Tanh, ...) since they have different characteristics with respect to backprop.
+1. You can try adding different strategies for model regularization (e.g., weight decay, more dropout, or batchnorm layers) to avoid overfitting. You might also try to decrease the learning rate (you will need to train for longer) - if the learning rate is too high, the model will coverge too quickly. You might also choose to experiment with different activation types (ReLU, ELU, Tanh, Sigmoid, ...) since they have different characteristics with respect to backprop.
+    * See [this chaper of Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/chap3.html) for a useful introduction to regularization.
 1. With x-forwarding to view the live camera stream, or when copying training data from the RACECAR to your laptop or a server, connecting to the car's router via Ethernet will probably be faster than connecting over WiFi. If you do need to stream or copy data over WiFi, try to use the 5GHz network which will probably be faster.
-1. Read [Nvidia's PilotNet paper](https://arxiv.org/pdf/1704.07911.pdf) and papers which have cited it (e.g., via Google Scholar) for many more ideas (often in methodology sections, and future work discussions).
 1. One powerful regularization/generalization technique for training neural networks is [multi-task learning](https://en.wikipedia.org/wiki/Multi-task_learning). A crude version of this approach might be to add a second output to the network which predicts velocities (which is also being saved in your CSV). It is optional whether you choose to command the model's predicted velocities or continue to command a fixed speed (the current behavior of `drive_RACECAR.py`) when running inference - the benefits to model regularization may still be gained from this change. However, this will likely require more training data.
+1. See the cited papers in the [References](index.md#references) section to find many more ideas for improvement. One place to start is by reading [Nvidia's PilotNet paper](https://arxiv.org/pdf/1704.07911.pdf) and papers which have cited it (e.g., using Google Scholar) for some ideas (often in methodology sections, and future work discussions). 
