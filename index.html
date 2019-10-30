@@ -178,11 +178,10 @@ $ conda env create -f environment-gpu.yml
 <h2 id="part-2-racecar-data-collection-and-training">Part 2: RACECAR data collection and training</h2>
 <p>In this section you will manually collect steering angle data by driving the car around. </p>
 <p>A good first task is to train the RACECAR to drive around some tables in a circle, before tackling a more complex course layout such as Stata basement. You can also define some more intermediate-difficulty courses (figure-eights, snake patterns, etc) to gain intuition on what types of training and validation methods are most effective.</p>
-<p>Here is an example of training data collected around some tables in a classroom:</p>
+<p>For example, here is a third-person view of a car autonomously driving around several tables in a classroom using a trained PilotNet model:</p>
 <p><img alt="" src="img/carpath.png" style="width:50%;" /></p>
 <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/dvyEbNUAKSE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 
-<p>And here is a third-person view of a car autonomously driving around the same path using a trained PilotNet model:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/BnLihmE9o0k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <p>The following script will record images from the ZED camera on the RACECAR along with the joystick-commanded steering angle (through <code>teleop</code>):</p>
@@ -417,7 +416,10 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 </li>
 <li>With x-forwarding to view the live camera stream, or when copying training data from the RACECAR to your laptop or a server, connecting to the car's router via Ethernet will probably be faster than connecting over WiFi. If you do need to stream or copy data over WiFi, try to use the 5GHz network which will probably be faster.</li>
 <li>One powerful regularization/generalization technique for training neural networks is <a href="https://en.wikipedia.org/wiki/Multi-task_learning">multi-task learning</a>. A crude version of this approach might be to add a second output to the network which predicts velocities (which is also being saved in your CSV). It is optional whether you choose to command the model's predicted velocities or continue to command a fixed speed (the current behavior of <code>drive_RACECAR.py</code>) when running inference - the benefits to model regularization may still be gained from this change. However, this will likely require more training data.</li>
-<li>See the cited papers in the <a href=".#references">References</a> section to find many more ideas for improvement. One place to start is by reading <a href="https://arxiv.org/pdf/1704.07911.pdf">Nvidia's PilotNet paper</a> and papers which have cited it (e.g., using Google Scholar) for some ideas (often in methodology sections, and future work discussions). </li>
+<li>See the cited papers in the <a href=".#references">References</a> section to find many more ideas for improvement. One place to start is by reading <a href="https://arxiv.org/pdf/1704.07911.pdf">Nvidia's PilotNet paper</a> and papers which have cited it (e.g., using Google Scholar) for some ideas (often in methodology sections, and future work discussions). <ul>
+<li>Note that the PilotNet paper uses multiple cameras (albeit at different angles). You might try utilizing both the left and right images from the ZED stereo camera, or even the computed depth image, instead of only using one of the cameras.</li>
+</ul>
+</li>
 </ol>
               
             </div>
@@ -461,5 +463,5 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-10-30 21:07:55
+Build Date UTC : 2019-10-30 21:15:59
 -->
