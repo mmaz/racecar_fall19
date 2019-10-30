@@ -78,13 +78,11 @@ In this section you will manually collect steering angle data by driving the car
 
 A good first task is to train the RACECAR to drive around some tables in a circle, before tackling a more complex course layout such as Stata basement. You can also define some more intermediate-difficulty courses (figure-eights, snake patterns, etc) to gain intuition on what types of training and validation methods are most effective.
 
-Here is an example of training data collected around some tables in a classroom:
+For example, here is a third-person view of a car autonomously driving around several tables in a classroom using a trained PilotNet model:
 
 ![](img/carpath.png){: style="width:50%;" }
 
 <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/dvyEbNUAKSE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
-
-And here is a third-person view of a car autonomously driving around the same path using a trained PilotNet model:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/BnLihmE9o0k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -369,3 +367,4 @@ If you are having diffuclty training a working model, or are looking for ideas f
 1. With x-forwarding to view the live camera stream, or when copying training data from the RACECAR to your laptop or a server, connecting to the car's router via Ethernet will probably be faster than connecting over WiFi. If you do need to stream or copy data over WiFi, try to use the 5GHz network which will probably be faster.
 1. One powerful regularization/generalization technique for training neural networks is [multi-task learning](https://en.wikipedia.org/wiki/Multi-task_learning). A crude version of this approach might be to add a second output to the network which predicts velocities (which is also being saved in your CSV). It is optional whether you choose to command the model's predicted velocities or continue to command a fixed speed (the current behavior of `drive_RACECAR.py`) when running inference - the benefits to model regularization may still be gained from this change. However, this will likely require more training data.
 1. See the cited papers in the [References](index.md#references) section to find many more ideas for improvement. One place to start is by reading [Nvidia's PilotNet paper](https://arxiv.org/pdf/1704.07911.pdf) and papers which have cited it (e.g., using Google Scholar) for some ideas (often in methodology sections, and future work discussions). 
+    * Note that the PilotNet paper uses multiple cameras (albeit at different angles). You might try utilizing both the left and right images from the ZED stereo camera, or even the computed depth image, instead of only using one of the cameras.
