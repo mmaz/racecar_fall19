@@ -408,6 +408,7 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 <li>Be wary of overfitting: try multiple saved checkpoints instead of just the last one (a checkpoint is saved every epoch). You can shorten the number of training steps per epoch and increase the number of epochs to have more models to try out. You can try a larger batch size on the server too. </li>
 <li>Try to plan multiple training experiments ahead of time. Instead of changing one hyperparameter, training a model and testing, and going back to change another hyperparameter, try to train several models with different hyperparameters in one session and copy them all over to your racecar.<ul>
 <li>Moreover, if you are using the <a href="https://github.com/mmaz/imitation_learning_lab/blob/2ebcd9140e34ca2e2283496a84ea4e47c8979788/infer_RACECAR.py#L21"><code>SAVE_RUN</code></a> flag, you can try visualizing predictions from all your model variants on the same saved run - you might find another trained model or saved epoch is doing better than the one you were using for testing.</li>
+<li>The simplistic image augmentation strategies provided might lower model performance in certain conditions, thus you should also train a model with augmentation disabled, and test both. (This is of course not a general rule. The interested reader is encouraged to explore current research on augmentation techniques, such as <a href="https://bair.berkeley.edu/blog/2019/06/07/data_aug/">Population-Based Augmentation</a>.)</li>
 </ul>
 </li>
 <li>You can try adding different strategies for model regularization (e.g., weight decay, more dropout, or batchnorm layers) to avoid overfitting. You might also try to decrease the learning rate (you will need to train for longer) - if the learning rate is too high, the model will coverge too quickly. You might also choose to experiment with different activation types (ReLU, ELU, Tanh, Sigmoid, ...) since they have different characteristics with respect to backprop.<ul>
@@ -463,5 +464,5 @@ model.fit_generator(generator=batch_generator(X_train, y_train, batch_size=BATCH
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-10-30 21:15:59
+Build Date UTC : 2019-11-01 15:02:21
 -->
