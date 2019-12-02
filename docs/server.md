@@ -70,7 +70,7 @@ at your local command prompt.
 
 ### Convenient SCP
 
-With the shortcut, you can also SCP directories and files to the server easily, e.g., to copy to your team's directory:
+With the shortcut documented above, you can also SCP directories and files to the server easily, e.g., to copy to your team's directory:
 
 ```shell
 $ scp -r local_directory_w_training_images 6a01:~/teamN/ # where N is your team ID
@@ -87,18 +87,28 @@ where `-r` specifies *recursive* usage (i.e., the ability to copy directories an
 However, copying each `.jpg` training image from a source to a destination one-by-one is slow. You might instead want to create a single `.zip` or `.tar.gz` file of your directory. For instance, if you are on your local machine, and you want to zip up a folder called `data_12_02_2019_8-34/` to copy over to a training laptop:
 
 ```bash
-# format: tar -czvf $FILENAME $DIRECTORY
+# format: tar -czvf $DESIRED_FILENAME $DIRECTORY
 $ tar -czvf data_12_02_2019_8-34.tar.gz  data_12_02_2019_8-34/
-# replace USERNAME, IPADDRESS, and DESTPATH:
-$ scp data_12_02_2019_8-34.tar.gz $USERNAME@IPADDRESS:~/teamID 
-# note that the tilde ~ after the : specifies a destination path (teamID) relative 
-# to $USERNAME's home directory
 ```
+
+Then, to `scp` the file over, if you are NOT using the config shortcut documented above: 
+
+```bash
+# replace USERNAME and IPADDRESS
+$ scp data_12_02_2019_8-34.tar.gz $USERNAME@IPADDRESS:~/teamN
+```
+If you are using the shortcut you can instead run the following command:
+
+```bash
+$ scp data_12_02_2019_8-34.tar.gz 6a01:~/teamN
+```
+
+Note that the tilde `~` after the `:` specifies a destination path (teamID) relative to `$USERNAME`'s home directory.
 
 The folder can be expanded on the remote laptop (after ssh-ing in) via:
 
 ```bash
-$ cd ~/teamID
+$ cd ~/teamN
 $ tar -xzvf data_12_02_2019_8-34.tar.gz 
 ```
 
