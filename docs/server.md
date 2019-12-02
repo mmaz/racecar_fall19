@@ -76,6 +76,32 @@ With the shortcut, you can also SCP directories and files to the server easily, 
 $ scp -r local_directory_w_training_images 6a01:~/teamN/ # where N is your team ID
 ```
 
+### (Faster) SCP Copying:
+
+`scp` (secure copy) is a tool used for copying files to or from a remote location over a network. It follows the same format as `cp`:
+
+`scp -r $SOURCE_LOCATION $DESTINATION_LOCATION`
+
+where `-r` specifies *recursive* usage (i.e., the ability to copy directories and subdirectories).
+
+However, copying each `.jpg` training image from a source to a destination one-by-one is slow. You might instead want to create a single `.zip` or `.tar.gz` file of your directory. For instance, if you are on your local machine, and you want to zip up a folder called `data_12_02_2019_8-34/` to copy over to a training laptop:
+
+```bash
+# format: tar -czvf $FILENAME $DIRECTORY
+$ tar -czvf data_12_02_2019_8-34.tar.gz  data_12_02_2019_8-34/
+# replace USERNAME, IPADDRESS, and DESTPATH:
+$ scp data_12_02_2019_8-34.tar.gz $USERNAME@IPADDRESS:~/teamID 
+# note that the tilde ~ after the : specifies a destination path (teamID) relative 
+# to $USERNAME's home directory
+```
+
+The folder can be expanded on the remote laptop (after ssh-ing in) via:
+
+```bash
+$ cd ~/teamID
+$ tar -xzvf data_12_02_2019_8-34.tar.gz 
+```
+
 ### No-password logins
 
 If you would like to avoid being asked for a password each time, you can generate a local identity file:
