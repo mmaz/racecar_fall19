@@ -45,7 +45,7 @@ You can simplify the process of connecting to the server further by adding the f
     `$ vi ~/.ssh/config`
 
 !!! note
-    You will need to replace `$USERNAME` and `$IP_ADDRESS` below with the appropriate values (ask the instructors in the Slack chatroom)
+    You will need to replace `$USERNAME` and `$IP_ADDRESS` below with the appropriate values (ask the instructors)
 
 ```
 Host 6a01
