@@ -166,6 +166,24 @@
 <pre><code class="shell">$ scp -r local_directory_w_training_images 6a01:~/teamN/ # where N is your team ID
 </code></pre>
 
+<h3 id="faster-scp-copying">(Faster) SCP Copying:</h3>
+<p><code>scp</code> (secure copy) is a tool used for copying files to or from a remote location over a network. It follows the same format as <code>cp</code>:</p>
+<p><code>scp -r $SOURCE_LOCATION $DESTINATION_LOCATION</code></p>
+<p>where <code>-r</code> specifies <em>recursive</em> usage (i.e., the ability to copy directories and subdirectories).</p>
+<p>However, copying each <code>.jpg</code> training image from a source to a destination one-by-one is slow. You might instead want to create a single <code>.zip</code> or <code>.tar.gz</code> file of your directory. For instance, if you are on your local machine, and you want to zip up a folder called <code>data_12_02_2019_8-34/</code> to copy over to a training laptop:</p>
+<pre><code class="bash"># format: tar -czvf $FILENAME $DIRECTORY
+$ tar -czvf data_12_02_2019_8-34.tar.gz  data_12_02_2019_8-34/
+# replace USERNAME, IPADDRESS, and DESTPATH:
+$ scp data_12_02_2019_8-34.tar.gz $USERNAME@IPADDRESS:~/teamID 
+# note that the tilde ~ after the : specifies a destination path (teamID) relative 
+# to $USERNAME's home directory
+</code></pre>
+
+<p>The folder can be expanded on the remote laptop (after ssh-ing in) via:</p>
+<pre><code class="bash">$ cd ~/teamID
+$ tar -xzvf data_12_02_2019_8-34.tar.gz 
+</code></pre>
+
 <h3 id="no-password-logins">No-password logins</h3>
 <p>If you would like to avoid being asked for a password each time, you can generate a local identity file:</p>
 <p><a href="https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent</a></p>
